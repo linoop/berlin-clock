@@ -26,12 +26,20 @@ import androidx.compose.ui.unit.dp
 import com.linoop.berlinclock.R
 import com.linoop.berlinclock.presentation.ui.components.BerlinClockDisplay
 import com.linoop.berlinclock.presentation.viewmodel.ClockDisplayViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BerlinClockScreen(
     viewModel: ClockDisplayViewModel
 ) {
+    LaunchedEffect(Unit) {
+        while (isActive) {
+            viewModel.updateClock()
+            delay(1000L)
+        }
+    }
     val currentTime by viewModel.currentTime.collectAsState()
     val berlinClockDisplay by viewModel.berlinClockDisplay.collectAsState()
 
