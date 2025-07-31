@@ -27,6 +27,9 @@ fun BerlinClockDisplay(
     ) {
         SecondsLight(isOn = berlinClockUiState.secondsLight)
         HourRow(lights = berlinClockUiState.topHourRow)
+        HourRow(lights = berlinClockUiState.bottomHourRow)
+        MinuteRow(lights = berlinClockUiState.topMinuteRow, isTopRow = true)
+        MinuteRow(lights = berlinClockUiState.bottomMinuteRow, isTopRow = false)
     }
 }
 
@@ -50,6 +53,20 @@ private fun HourRow(lights: String) {
             LightBlock(
                 color = mapCharToColor(light),
                 size = 60.dp
+            )
+        }
+    }
+}
+
+@Composable
+private fun MinuteRow(lights: String, isTopRow: Boolean) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        lights.forEach { light ->
+            LightBlock(
+                color = mapCharToColor(light),
+                size = if (isTopRow) 25.dp else 40.dp
             )
         }
     }
