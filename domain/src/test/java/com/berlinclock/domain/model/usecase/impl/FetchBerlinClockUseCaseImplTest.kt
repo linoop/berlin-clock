@@ -8,6 +8,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -43,4 +44,23 @@ class FetchBerlinClockUseCaseImplTest {
         assertFalse(result.secondsLight)
         verify { currentTimeProvider.getCurrentTime() }
     }
+
+    @Test
+    fun `getBerlinClock handles top hour row for various hours`() {
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(1, 0, 0)
+        assertEquals("OOOO", useCase.getBerlinClock().topHourRow)
+
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(5, 0, 0)
+        assertEquals("ROOO", useCase.getBerlinClock().topHourRow)
+
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(10, 0, 0)
+        assertEquals("RROO", useCase.getBerlinClock().topHourRow)
+
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(15, 0, 0)
+        assertEquals("RRRO", useCase.getBerlinClock().topHourRow)
+
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(20, 0, 0)
+        assertEquals("RRRR", useCase.getBerlinClock().topHourRow)
+    }
+
 }

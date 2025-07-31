@@ -15,10 +15,16 @@ class FetchBerlinClockUseCaseImpl @Inject constructor(
 
         return BerlinClockData(
             secondsLight = getSecondsLight(timeData.seconds),
+            topHourRow = getTopHourRow(timeData.hours),
         )
 
     }
 
     private fun getSecondsLight(seconds: Int) = seconds % 2 == 0
+
+    private fun getTopHourRow(hours: Int): String {
+        val lightsOn = hours / 5
+        return "R".repeat(lightsOn) + "O".repeat(4 - lightsOn)
+    }
 
 }
