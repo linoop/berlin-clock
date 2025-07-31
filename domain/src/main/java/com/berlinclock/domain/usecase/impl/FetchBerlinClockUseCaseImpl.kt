@@ -18,6 +18,7 @@ class FetchBerlinClockUseCaseImpl @Inject constructor(
             topHourRow = getTopHourRow(timeData.hours),
             bottomHourRow = getBottomHourRow(timeData.hours),
             topMinuteRow = getTopMinuteRow(timeData.minutes),
+            bottomMinuteRow = getBottomMinuteRow(timeData.minutes)
         )
 
     }
@@ -43,5 +44,10 @@ class FetchBerlinClockUseCaseImpl @Inject constructor(
                 else -> "Y"
             }
         }
+    }
+
+    private fun getBottomMinuteRow(minutes: Int): String {
+        val lightsOn = minutes % 5
+        return "Y".repeat(lightsOn) + "O".repeat(4 - lightsOn)
     }
 }

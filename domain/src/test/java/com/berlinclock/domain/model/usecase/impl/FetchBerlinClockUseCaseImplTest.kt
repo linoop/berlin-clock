@@ -1,5 +1,6 @@
 package com.berlinclock.domain.model.usecase.impl
 
+import com.berlinclock.domain.model.BerlinClockData
 import com.berlinclock.domain.model.TimeEntity
 import com.berlinclock.domain.repository.SystemTimeRepository
 import com.berlinclock.domain.usecase.impl.FetchBerlinClockUseCaseImpl
@@ -104,5 +105,45 @@ class FetchBerlinClockUseCaseImplTest {
         every { currentTimeProvider.getCurrentTime() } returns TimeEntity(0, 55, 0)
         assertEquals("YYRYYRYYRYY", useCase.getBerlinClock().topMinuteRow)
     }
+
+
+    @Test
+    fun `getBerlinClock handles bottom minute row for various minutes`() {
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(0, 1, 0)
+        assertEquals("YOOO", useCase.getBerlinClock().bottomMinuteRow)
+
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(0, 7, 0)
+        assertEquals("YYOO", useCase.getBerlinClock().bottomMinuteRow)
+
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(0, 13, 0)
+        assertEquals("YYYO", useCase.getBerlinClock().bottomMinuteRow)
+
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(0, 19, 0)
+        assertEquals("YYYY", useCase.getBerlinClock().bottomMinuteRow)
+
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(0, 20, 0)
+        assertEquals("OOOO", useCase.getBerlinClock().bottomMinuteRow)
+    }
+
+    @Test
+    fun `getBerlinClock handles specific time 14-35-27`() {
+        val timeDto = TimeEntity(hours = 14, minutes = 35, seconds = 27)
+        every { currentTimeProvider.getCurrentTime() } returns timeDto
+
+        val result = useCase.getBerlinClock()
+
+        assertEquals(
+            BerlinClockData(
+                secondsLight = false,
+                topHourRow = "RROO",
+                bottomHourRow = "RRRR",
+                topMinuteRow = "YYRYYRYOOOO",
+                bottomMinuteRow = "OOOO"
+            ),
+            result
+        )
+        verify { currentTimeProvider.getCurrentTime() }
+    }
+
 
 }
