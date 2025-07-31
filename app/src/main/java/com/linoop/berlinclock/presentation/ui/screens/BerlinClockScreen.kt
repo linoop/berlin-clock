@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.linoop.berlinclock.R
+import com.linoop.berlinclock.presentation.ui.components.BerlinClockDisplay
 import com.linoop.berlinclock.presentation.viewmodel.ClockDisplayViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,6 +57,8 @@ fun BerlinClockScreen(
                 fontFamily = FontFamily.Monospace,
                 textAlign = TextAlign.Center
             )
+            Spacer(modifier = Modifier.height(32.dp))
+            BerlinClockDisplay(berlinClockUiState = berlinClockDisplay)
         }
     }
 }
