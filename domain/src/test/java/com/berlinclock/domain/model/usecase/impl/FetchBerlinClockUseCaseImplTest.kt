@@ -63,4 +63,22 @@ class FetchBerlinClockUseCaseImplTest {
         assertEquals("RRRR", useCase.getBerlinClock().topHourRow)
     }
 
+    @Test
+    fun `getBerlinClock handles bottom hour row for various hours`() {
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(1, 0, 0)
+        assertEquals("ROOO", useCase.getBerlinClock().bottomHourRow)
+
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(7, 0, 0)
+        assertEquals("RROO", useCase.getBerlinClock().bottomHourRow)
+
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(13, 0, 0)
+        assertEquals("RRRO", useCase.getBerlinClock().bottomHourRow)
+
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(19, 0, 0)
+        assertEquals("RRRR", useCase.getBerlinClock().bottomHourRow)
+
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(20, 0, 0)
+        assertEquals("OOOO", useCase.getBerlinClock().bottomHourRow)
+    }
+
 }
