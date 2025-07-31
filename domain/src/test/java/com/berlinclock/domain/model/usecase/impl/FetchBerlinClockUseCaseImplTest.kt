@@ -81,4 +81,28 @@ class FetchBerlinClockUseCaseImplTest {
         assertEquals("OOOO", useCase.getBerlinClock().bottomHourRow)
     }
 
+    @Test
+    fun `getBerlinClock handles top minute row for quarter positions`() {
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(0, 15, 0)
+        assertEquals("YYROOOOOOOO", useCase.getBerlinClock().topMinuteRow)
+
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(0, 30, 0)
+        assertEquals("YYRYYROOOOO", useCase.getBerlinClock().topMinuteRow)
+
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(0, 45, 0)
+        assertEquals("YYRYYRYYROO", useCase.getBerlinClock().topMinuteRow)
+    }
+
+    @Test
+    fun `getBerlinClock handles top minute row for various minutes`() {
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(0, 5, 0)
+        assertEquals("YOOOOOOOOOO", useCase.getBerlinClock().topMinuteRow)
+
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(0, 25, 0)
+        assertEquals("YYRYYOOOOOO", useCase.getBerlinClock().topMinuteRow)
+
+        every { currentTimeProvider.getCurrentTime() } returns TimeEntity(0, 55, 0)
+        assertEquals("YYRYYRYYRYY", useCase.getBerlinClock().topMinuteRow)
+    }
+
 }

@@ -17,6 +17,7 @@ class FetchBerlinClockUseCaseImpl @Inject constructor(
             secondsLight = getSecondsLight(timeData.seconds),
             topHourRow = getTopHourRow(timeData.hours),
             bottomHourRow = getBottomHourRow(timeData.hours),
+            topMinuteRow = getTopMinuteRow(timeData.minutes),
         )
 
     }
@@ -33,4 +34,14 @@ class FetchBerlinClockUseCaseImpl @Inject constructor(
         return "R".repeat(lightsOn) + "O".repeat(4 - lightsOn)
     }
 
+    private fun getTopMinuteRow(minutes: Int): String {
+        val lightsOn = minutes / 5
+        return (1..11).joinToString("") { position ->
+            when {
+                position > lightsOn -> "O"
+                position % 3 == 0 -> "R"  // Quarter positions (3, 6, 9)
+                else -> "Y"
+            }
+        }
+    }
 }
